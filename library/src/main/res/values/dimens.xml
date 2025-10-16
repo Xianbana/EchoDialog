@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="echo_dialog_corner_radius">16dp</dimen>
+    <dimen name="echo_dialog_max_width">360dp</dimen>
+    <dimen name="echo_dialog_button_height">40dp</dimen>
+    <dimen name="echo_dialog_horizontal_padding">20dp</dimen>
+    <dimen name="echo_dialog_vertical_padding">20dp</dimen>
+</resources>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ThemeOverlay.EchoDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="echoDialogCornerRadius">@dimen/echo_dialog_corner_radius</item>
+        <item name="echoDialogBackgroundColor">@color/echo_dialog_bg</item>
+        <item name="echoDialogTitleColor">@color/echo_dialog_title</item>
+        <item name="echoDialogMessageColor">@color/echo_dialog_message</item>
+        <item name="echoDialogPositiveBg">@color/echo_dialog_positive_bg</item>
+        <item name="echoDialogPositiveTextColor">@color/echo_dialog_positive_text</item>
+        <item name="echoDialogNegativeBg">@color/echo_dialog_negative_bg</item>
+        <item name="echoDialogNegativeTextColor">@color/echo_dialog_negative_text</item>
+        <item name="echoDialogMaxWidth">@dimen/echo_dialog_max_width</item>
+        <item name="echoDialogButtonHeight">@dimen/echo_dialog_button_height</item>
+        <item name="echoDialogHorizontalPadding">@dimen/echo_dialog_horizontal_padding</item>
+        <item name="echoDialogVerticalPadding">@dimen/echo_dialog_vertical_padding</item>
+    </style>
+</resources>
+

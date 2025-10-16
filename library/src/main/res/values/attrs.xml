@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EchoDialog">
+        <attr name="echoDialogCornerRadius" format="dimension"/>
+        <attr name="echoDialogBackgroundColor" format="color"/>
+        <attr name="echoDialogTitleColor" format="color"/>
+        <attr name="echoDialogMessageColor" format="color"/>
+        <attr name="echoDialogPositiveBg" format="reference|color"/>
+        <attr name="echoDialogPositiveTextColor" format="color"/>
+        <attr name="echoDialogNegativeBg" format="reference|color"/>
+        <attr name="echoDialogNegativeTextColor" format="color"/>
+        <attr name="echoDialogMaxWidth" format="dimension"/>
+        <attr name="echoDialogButtonHeight" format="dimension"/>
+        <attr name="echoDialogHorizontalPadding" format="dimension"/>
+        <attr name="echoDialogVerticalPadding" format="dimension"/>
+    </declare-styleable>
+
+    <attr name="echoDialogStyle" format="reference"/>
+</resources>
+
