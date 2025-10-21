@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.xian.echo.core.DialogConfig
+import com.xian.echo.core.EchoDialogTheme
+import com.xian.echo.core.ThemeApplier
 
 class ConfirmDialog(private val context: Context) {
     
@@ -13,6 +15,7 @@ class ConfirmDialog(private val context: Context) {
     
     fun show(
         config: DialogConfig,
+        theme: EchoDialogTheme,
         onPositive: () -> Unit,
         onNegative: (() -> Unit)? = null
     ) {
@@ -37,7 +40,13 @@ class ConfirmDialog(private val context: Context) {
                 negative.visibility = View.VISIBLE
             }
             
-            // 应用样式
+            // 应用主题
+            ThemeApplier.applyToTextView(title, theme)
+            ThemeApplier.applyToMessageTextView(message, theme)
+            ThemeApplier.applyToButton(positive, theme, true)
+            ThemeApplier.applyToButton(negative, theme, false)
+            
+            // 应用配置中的样式（优先级更高）
             config.positiveBgResId?.let { positive.setBackgroundResource(it) }
             config.negativeBgResId?.let { negative.setBackgroundResource(it) }
             config.positiveTextColor?.let { positive.setTextColor(it) }

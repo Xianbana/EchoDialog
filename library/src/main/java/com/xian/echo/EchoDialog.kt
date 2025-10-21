@@ -3,6 +3,8 @@ package com.xian.echo
 import android.content.Context
 import com.xian.echo.core.DialogConfig
 import com.xian.echo.core.DialogResult.ChecklistSelection
+import com.xian.echo.core.EchoDialogTheme
+import com.xian.echo.core.EchoDialogThemes
 
 /**
  * EchoDialog 全局管理器
@@ -11,6 +13,7 @@ import com.xian.echo.core.DialogResult.ChecklistSelection
 object EchoDialog {
     
     private var appContext: Context? = null
+    private var globalTheme: EchoDialogTheme = EchoDialogThemes.DEFAULT
     
     /**
      * 初始化 EchoDialog
@@ -18,6 +21,53 @@ object EchoDialog {
      */
     fun init(context: Context) {
         this.appContext = context.applicationContext
+    }
+    
+    /**
+     * 设置全局主题
+     */
+    fun setTheme(theme: EchoDialogTheme) {
+        this.globalTheme = theme
+    }
+    
+    /**
+     * 获取当前主题
+     */
+    fun getTheme(): EchoDialogTheme = globalTheme
+    
+    /**
+     * 设置浅色主题
+     */
+    fun setLightTheme() {
+        this.globalTheme = EchoDialogThemes.LIGHT
+    }
+    
+    /**
+     * 设置深色主题
+     */
+    fun setDarkTheme() {
+        this.globalTheme = EchoDialogThemes.DARK
+    }
+    
+    /**
+     * 设置 Material Design 主题
+     */
+    fun setMaterialTheme() {
+        this.globalTheme = EchoDialogThemes.MATERIAL
+    }
+    
+    /**
+     * 设置自定义主题
+     */
+    fun setCustomTheme(primaryColor: Int, backgroundColor: Int = android.graphics.Color.WHITE, textColor: Int = android.graphics.Color.BLACK) {
+        this.globalTheme = EchoDialogThemes.createCustom(primaryColor, backgroundColor, textColor)
+    }
+    
+    /**
+     * 设置品牌主题
+     */
+    fun setBrandTheme(brandColor: Int, isDark: Boolean = false) {
+        this.globalTheme = EchoDialogThemes.createBrand(brandColor, isDark)
     }
     
     private fun getContext(): Context {
@@ -49,7 +99,7 @@ object EchoDialog {
             positiveText = positiveText,
             negativeText = negativeText
         )
-        ConfirmDialog(context).show(config, onPositive, onNegative)
+        ConfirmDialog(context).show(config, globalTheme, onPositive, onNegative)
     }
     
     /**
