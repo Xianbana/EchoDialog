@@ -55,7 +55,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = project.findProperty("libraryGroupId") as String? ?: "com.github.Xianbana"
             artifactId = project.findProperty("libraryArtifactId") as String? ?: "EchoDialog"
-            version = project.findProperty("libraryVersion") as String? ?: "1.0.0"
+            version = project.findProperty("libraryVersion") as String? ?: "1.0.1"
 
             afterEvaluate {
                 from(components["release"])

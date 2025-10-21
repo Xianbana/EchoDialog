@@ -1,10 +1,8 @@
 jdk:
   - openjdk17
 
-before_install:
-  # 确保 gradlew 可执行
-  - chmod +x gradlew
-
 install:
-  # 只构建并发布 library 模块，不构建 app
-  - ./gradlew :library:publishReleasePublicationToMavenLocal --no-daemon
+  - ./gradlew -PGROUP=$GROUP -PVERSION=$VERSION clean :library:assembleRelease :library:publishReleasePublicationToMavenLocal --no-daemon
+
+before_install:
+  - ./gradlew clean
