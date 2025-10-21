@@ -24,6 +24,12 @@ sealed interface DialogResult : Parcelable {
     
     @Parcelize
     data class SeekBarValue(val value: Int) : DialogResult
+    
+    @Parcelize
+    data class ChecklistSelection(
+        val selectedIndices: List<Int>,
+        val selectedItems: List<String>
+    ) : DialogResult
 }
 
 
