@@ -16,7 +16,8 @@ data class DialogConfig(
     val positiveTextColor: Int? = null,
     val negativeBgResId: Int? = null,
     val negativeTextColor: Int? = null,
-    val links: List<LinkInfo> = emptyList()
+    val links: List<LinkInfo> = emptyList(),
+    val inputHint: String? = null
 ) : Parcelable
 
 @Parcelize

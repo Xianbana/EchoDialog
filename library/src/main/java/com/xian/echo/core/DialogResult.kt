@@ -21,6 +21,9 @@ sealed interface DialogResult : Parcelable {
     
     @Parcelize
     data class LinkClick(val url: String, val text: String) : DialogResult
+    
+    @Parcelize
+    data class SeekBarValue(val value: Int) : DialogResult
 }
 
 

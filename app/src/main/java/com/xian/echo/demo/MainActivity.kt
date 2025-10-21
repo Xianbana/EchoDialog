@@ -13,6 +13,7 @@ import android.view.View
 import com.xian.echo.ConfirmDialogFragment
 import com.xian.echo.InputDialogFragment
 import com.xian.echo.ChecklistDialogFragment
+import com.xian.echo.SeekBarDialogFragment
 import com.xian.echo.core.DialogConfig
 import com.xian.echo.core.DialogResult
 
@@ -29,23 +30,26 @@ class MainActivity : AppCompatActivity() {
 
         val menu = findViewById<RecyclerView>(R.id.menuRecycler)
         menu.layoutManager = LinearLayoutManager(this)
-        val items = listOf("Confirm Dialog", "Input Dialog (number)", "Checklist Dialog")
-        menu.adapter = object : RecyclerView.Adapter<MenuVH>() {
-            override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): MenuVH {
-                val v = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
-                return MenuVH(v)
+        val items = listOf(
+            "Confirm Dialog", 
+            "Input Dialog (number)", 
+            "Input Dialog (email)",
+            "Input Dialog (password)",
+            "Input Dialog (text)",
+            "Checklist Dialog",
+            "SeekBar Dialog"
+        )
+        
+        menu.adapter = DialogMenuAdapter(items) { position ->
+            when (position) {
+                0 -> showConfirm()
+                1 -> showInputNumber()
+                2 -> showInputEmail()
+                3 -> showInputPassword()
+                4 -> showInputText()
+                5 -> showChecklist()
+                6 -> showSeekBar()
             }
-            override fun onBindViewHolder(holder: MenuVH, position: Int) {
-                holder.text.text = items[position]
-                holder.itemView.setOnClickListener {
-                    when (position) {
-                        0 -> showConfirm()
-                        1 -> showInputNumber()
-                        2 -> showChecklist()
-                    }
-                }
-            }
-            override fun getItemCount(): Int = items.size
         }
     }
 
@@ -91,8 +95,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showInputNumber() {
         val config = DialogConfig(
+            title = "输入数字",
             positiveText = "确定",
-            negativeText = "取消"
+            negativeText = "取消",
+            inputHint = "请输入数字"
         )
         val f = InputDialogFragment.newInstance(config, android.text.InputType.TYPE_CLASS_NUMBER)
         supportFragmentManager.setFragmentResultListener(InputDialogFragment.REQUEST_KEY, this) { _, b ->
@@ -104,8 +110,69 @@ class MainActivity : AppCompatActivity() {
         f.show(supportFragmentManager, "input")
     }
 
+    private fun showInputEmail() {
+        val config = DialogConfig(
+            title = "输入邮箱",
+            positiveText = "确定",
+            negativeText = "取消",
+            inputHint = "请输入邮箱地址"
+        )
+        val f = InputDialogFragment.newInstance(
+            config, 
+            android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        )
+        supportFragmentManager.setFragmentResultListener(InputDialogFragment.REQUEST_KEY, this) { _, b ->
+            val r = b.get("result")
+            if (r is DialogResult.Input) {
+                android.widget.Toast.makeText(this, "邮箱: ${r.text}", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        f.show(supportFragmentManager, "input_email")
+    }
+
+    private fun showInputPassword() {
+        val config = DialogConfig(
+            title = "输入密码",
+            positiveText = "确定",
+            negativeText = "取消",
+            inputHint = "请输入密码"
+        )
+        val f = InputDialogFragment.newInstance(
+            config, 
+            android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        )
+        supportFragmentManager.setFragmentResultListener(InputDialogFragment.REQUEST_KEY, this) { _, b ->
+            val r = b.get("result")
+            if (r is DialogResult.Input) {
+                android.widget.Toast.makeText(this, "密码长度: ${r.text.length}", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        f.show(supportFragmentManager, "input_password")
+    }
+
+    private fun showInputText() {
+        val config = DialogConfig(
+            title = "输入文本",
+            positiveText = "确定",
+            negativeText = "取消",
+            inputHint = "请输入文本内容"
+        )
+        val f = InputDialogFragment.newInstance(
+            config, 
+            android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        )
+        supportFragmentManager.setFragmentResultListener(InputDialogFragment.REQUEST_KEY, this) { _, b ->
+            val r = b.get("result")
+            if (r is DialogResult.Input) {
+                android.widget.Toast.makeText(this, "文本: ${r.text}", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        f.show(supportFragmentManager, "input_text")
+    }
+
     private fun showChecklist() {
         val config = DialogConfig(
+            title = "选择项目",
             positiveText = "保存",
             negativeText = "取消"
         )
@@ -123,8 +190,20 @@ class MainActivity : AppCompatActivity() {
         }
         f.show(supportFragmentManager, "checklist")
     }
-}
 
-class MenuVH(v: View) : RecyclerView.ViewHolder(v) {
-    val text: TextView = v.findViewById(android.R.id.text1)
+    private fun showSeekBar() {
+        val config = DialogConfig(
+            title = "音量调节",
+            positiveText = "确定",
+            negativeText = "取消"
+        )
+        val f = SeekBarDialogFragment.newInstanceForVolume(config, 50)
+        supportFragmentManager.setFragmentResultListener(SeekBarDialogFragment.REQUEST_KEY, this) { _, b ->
+            val r = b.get("result")
+            if (r is DialogResult.SeekBarValue) {
+                android.widget.Toast.makeText(this, "音量设置为: ${r.value}", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        f.show(supportFragmentManager, "seekbar")
+    }
 }

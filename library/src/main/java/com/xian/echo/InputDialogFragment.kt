@@ -25,15 +25,25 @@ class InputDialogFragment : BaseDialogFragment() {
     override fun onCreateDialogView(inflater: LayoutInflater, container: ViewGroup?): View {
         val root = inflater.inflate(R.layout.input_dialog, container, false)
 
+        val title = root.findViewById<TextView>(R.id.tv_title)
         val input = root.findViewById<EditText>(R.id.content)
         val positive = root.findViewById<TextView>(R.id.btn_positive)
         val negative = root.findViewById<TextView>(R.id.btn_negative)
+
+        // Handle title visibility
+        if (config.title.isNullOrEmpty()) {
+            title.visibility = View.GONE
+        } else {
+            title.text = config.title
+            title.visibility = View.VISIBLE
+        }
 
         // Allow single-button mode
         if (config.negativeText.isNullOrEmpty()) {
             negative.visibility = View.GONE
         } else {
             negative.text = config.negativeText
+            negative.visibility = View.VISIBLE
         }
         config.positiveText?.let { positive.text = it }
 
@@ -44,6 +54,11 @@ class InputDialogFragment : BaseDialogFragment() {
 
         val specifiedInputType = requireArguments().getInt(ARG_INPUT_TYPE, InputType.TYPE_CLASS_TEXT)
         input.inputType = specifiedInputType
+        
+        // 设置输入框提示文本
+        config.inputHint?.let { hint ->
+            input.hint = hint
+        }
 
         positive.setOnClickListener {
             parentFragmentManager.setFragmentResult(REQUEST_KEY, bundleOf(KEY_RESULT to DialogResult.Input(input.text.toString()) as Parcelable))
@@ -67,6 +82,47 @@ class InputDialogFragment : BaseDialogFragment() {
                 ARG_INPUT_TYPE to inputType
             )
             return f
+        }
+
+        // 便捷方法：常用输入类型
+        fun newInstanceForText(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_TEXT)
+        }
+
+        fun newInstanceForNumber(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_NUMBER)
+        }
+
+        fun newInstanceForEmail(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+        }
+
+        fun newInstanceForPassword(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        }
+
+        fun newInstanceForPhone(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_PHONE)
+        }
+
+        fun newInstanceForMultiLineText(config: DialogConfig): InputDialogFragment {
+            return newInstance(config, android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+        }
+
+        // 带默认 hint 的便捷方法
+        fun newInstanceForEmailWithHint(config: DialogConfig, hint: String = "请输入邮箱地址"): InputDialogFragment {
+            val configWithHint = config.copy(inputHint = hint)
+            return newInstance(configWithHint, android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+        }
+
+        fun newInstanceForPasswordWithHint(config: DialogConfig, hint: String = "请输入密码"): InputDialogFragment {
+            val configWithHint = config.copy(inputHint = hint)
+            return newInstance(configWithHint, android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        }
+
+        fun newInstanceForNumberWithHint(config: DialogConfig, hint: String = "请输入数字"): InputDialogFragment {
+            val configWithHint = config.copy(inputHint = hint)
+            return newInstance(configWithHint, android.text.InputType.TYPE_CLASS_NUMBER)
         }
     }
 }
