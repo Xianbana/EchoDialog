@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 浅色模式下的对话框背景色 -->
     <color name="echo_dialog_bg">#FFFFFFFF</color>
-    <color name="echo_dialog_title">#333333</color>
-    <color name="echo_dialog_message">#666666</color>
+    <!-- 浅色模式下的文本颜色 -->
+    <color name="echo_dialog_title">#FF212121</color>
+    <color name="echo_dialog_message">#FF424242</color>
+    <!-- 浅色模式下的按钮颜色 -->
     <color name="echo_dialog_positive_bg">#FF6200EE</color>
     <color name="echo_dialog_positive_text">#FFFFFFFF</color>
     <color name="echo_dialog_negative_bg">#FFE0E0E0</color>

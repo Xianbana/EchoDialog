@@ -9,8 +9,8 @@ class DemoApplication : Application() {
         // 初始化 EchoDialog
         EchoDialog.init(this)
 
-        // 设置主题（示例：使用浅色主题）
-//        EchoDialog.setDarkTheme()
+//         设置主题（示例：使用浅色主题）
+        EchoDialog.setDarkTheme()
 
         // 或者使用其他预设主题
         // EchoDialog.setDarkTheme()

@@ -3,6 +3,7 @@ package com.xian.echo.demo
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,19 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // 设置主题切换 Switch
+        val themeSwitch = findViewById<SwitchCompat>(R.id.themeSwitch)
+        // 初始化 Switch 状态（根据当前主题的标题颜色判断：白色=深色模式，黑色=浅色模式）
+        val currentTheme = EchoDialog.getTheme()
+        themeSwitch.isChecked = currentTheme.titleTextColor == android.graphics.Color.WHITE
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                EchoDialog.setDarkTheme()
+            } else {
+                EchoDialog.setLightTheme()
+            }
         }
 
         val menu = findViewById<RecyclerView>(R.id.menuRecycler)

@@ -10,9 +10,11 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.xian.echo.EchoDialog
 import com.xian.echo.core.BaseDialogFragment
 import com.xian.echo.core.DialogConfig
 import com.xian.echo.core.DialogResult
+import com.xian.echo.core.ThemeApplier
 
 class ChecklistDialogFragment : BaseDialogFragment() {
 
@@ -45,6 +47,12 @@ class ChecklistDialogFragment : BaseDialogFragment() {
             negative.text = config.negativeText
         }
 
+        // 应用全局主题
+        val theme = EchoDialog.getTheme()
+        ThemeApplier.applyToButton(positive, theme, true)
+        ThemeApplier.applyToButton(negative, theme, false)
+
+        // 应用配置中的样式（优先级更高）
         config.positiveBgResId?.let { positive.setBackgroundResource(it) }
         config.negativeBgResId?.let { negative.setBackgroundResource(it) }
         config.positiveTextColor?.let { positive.setTextColor(it) }
@@ -75,6 +83,11 @@ class ChecklistDialogFragment : BaseDialogFragment() {
             holder.text.text = text
             holder.text.movementMethod = LinkMovementMethod.getInstance()
             holder.checkbox.isChecked = checked.contains(position)
+            
+            // 应用全局主题
+            val theme = EchoDialog.getTheme()
+            ThemeApplier.applyToListItemText(holder.text, theme)
+            ThemeApplier.applyToCheckBox(holder.checkbox, theme)
             holder.itemView.setOnClickListener {
                 val newState = !holder.checkbox.isChecked
                 holder.checkbox.isChecked = newState

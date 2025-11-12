@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import com.xian.echo.EchoDialog
 import com.xian.echo.core.DialogConfig
+import com.xian.echo.core.ThemeApplier
 
 class SeekBarDialog(private val context: Context) {
     
@@ -47,6 +49,20 @@ class SeekBarDialog(private val context: Context) {
                 negative.visibility = View.VISIBLE
             }
             
+            // 应用主题背景到根视图
+            val theme = EchoDialog.getTheme()
+            val rootView = dialogView.rootView ?: dialogView
+            val backgroundDrawable = theme.createDialogBackground(context)
+            if (backgroundDrawable != null) {
+                rootView.background = backgroundDrawable
+            }
+            
+            // 应用主题
+            ThemeApplier.applyToTextView(title, theme)
+            ThemeApplier.applyToSeekBar(seekBar, theme)
+            ThemeApplier.applyToButton(positive, theme, true)
+            ThemeApplier.applyToButton(negative, theme, false)
+            
             // 应用样式
             config.positiveBgResId?.let { positive.setBackgroundResource(it) }
             config.negativeBgResId?.let { negative.setBackgroundResource(it) }
@@ -84,7 +100,18 @@ class SeekBarDialog(private val context: Context) {
                 setContentView(dialogView)
                 setCancelable(config.cancelable)
                 setCanceledOnTouchOutside(config.canceledOnTouchOutside)
-                window?.setBackgroundDrawableResource(R.drawable.echo_dialog_background)
+                
+                // 修复透明问题：先设置窗口背景为透明
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                
+                // 应用主题背景
+                val backgroundDrawable = theme.createDialogBackground(context)
+                if (backgroundDrawable != null) {
+                    window?.setBackgroundDrawable(backgroundDrawable)
+                } else {
+                    // 如果没有主题背景，使用默认背景
+                    window?.setBackgroundDrawableResource(R.drawable.echo_dialog_background)
+                }
                 
                 // 确保在正确的时机显示对话框
                 try {

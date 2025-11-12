@@ -20,7 +20,7 @@ object EchoDialogThemes {
      * 适合浅色背景的应用
      */
     val LIGHT = EchoDialogTheme(
-        dialogBackground = R.drawable.echo_dialog_background,
+        dialogBackgroundColor = Color.parseColor("#FFFFFFFF"), // 使用颜色值以便动态切换
         titleTextColor = Color.parseColor("#FF212121"),
         titleTextSize = 18f,
         messageTextColor = Color.parseColor("#FF424242"),
@@ -45,7 +45,7 @@ object EchoDialogThemes {
      * 适合深色背景的应用
      */
     val DARK = EchoDialogTheme(
-        dialogBackground = R.drawable.echo_dialog_background,
+        dialogBackgroundColor = Color.parseColor("#FF1E1E1E"), // 使用颜色值以便动态切换
         titleTextColor = Color.WHITE,
         titleTextSize = 18f,
         messageTextColor = Color.parseColor("#FFB3B3B3"),

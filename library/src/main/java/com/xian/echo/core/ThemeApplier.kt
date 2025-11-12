@@ -1,5 +1,6 @@
 package com.xian.echo.core
 
+import android.content.res.ColorStateList
 import android.widget.TextView
 import android.widget.EditText
 import android.widget.SeekBar
@@ -56,11 +57,29 @@ object ThemeApplier {
      * 应用主题到SeekBar
      */
     fun applyToSeekBar(seekBar: SeekBar, theme: EchoDialogTheme) {
-        theme.seekBarProgressColor?.let { 
-            seekBar.progressTintList = ContextCompat.getColorStateList(seekBar.context, it)
+        theme.seekBarProgressColor?.let { color ->
+            // 尝试作为资源 ID 获取，如果失败则作为颜色值使用
+            try {
+                seekBar.progressTintList = ContextCompat.getColorStateList(seekBar.context, color)
+            } catch (e: android.content.res.Resources.NotFoundException) {
+                // 不是资源 ID，直接使用颜色值
+                seekBar.progressTintList = ColorStateList.valueOf(color)
+            } catch (e: Exception) {
+                // 其他异常，也使用颜色值
+                seekBar.progressTintList = ColorStateList.valueOf(color)
+            }
         }
-        theme.seekBarThumbColor?.let { 
-            seekBar.thumbTintList = ContextCompat.getColorStateList(seekBar.context, it)
+        theme.seekBarThumbColor?.let { color ->
+            // 尝试作为资源 ID 获取，如果失败则作为颜色值使用
+            try {
+                seekBar.thumbTintList = ContextCompat.getColorStateList(seekBar.context, color)
+            } catch (e: android.content.res.Resources.NotFoundException) {
+                // 不是资源 ID，直接使用颜色值
+                seekBar.thumbTintList = ColorStateList.valueOf(color)
+            } catch (e: Exception) {
+                // 其他异常，也使用颜色值
+                seekBar.thumbTintList = ColorStateList.valueOf(color)
+            }
         }
     }
     
@@ -68,8 +87,17 @@ object ThemeApplier {
      * 应用主题到CheckBox
      */
     fun applyToCheckBox(checkBox: CheckBox, theme: EchoDialogTheme) {
-        theme.checkboxColor?.let { 
-            checkBox.buttonTintList = ContextCompat.getColorStateList(checkBox.context, it)
+        theme.checkboxColor?.let { color ->
+            // 尝试作为资源 ID 获取，如果失败则作为颜色值使用
+            try {
+                checkBox.buttonTintList = ContextCompat.getColorStateList(checkBox.context, color)
+            } catch (e: android.content.res.Resources.NotFoundException) {
+                // 不是资源 ID，直接使用颜色值
+                checkBox.buttonTintList = ColorStateList.valueOf(color)
+            } catch (e: Exception) {
+                // 其他异常，也使用颜色值
+                checkBox.buttonTintList = ColorStateList.valueOf(color)
+            }
         }
     }
     

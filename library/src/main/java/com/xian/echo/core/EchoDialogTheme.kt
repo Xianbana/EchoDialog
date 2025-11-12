@@ -13,8 +13,10 @@ import com.xian.echo.R
  * 用于统一设置对话框的样式
  */
 data class EchoDialogTheme(
-    // 对话框背景
+    // 对话框背景（drawable 资源 ID）
     val dialogBackground: Int? = null,
+    // 对话框背景颜色（颜色值，优先级高于 dialogBackground）
+    val dialogBackgroundColor: Int? = null,
     
     // 标题样式
     val titleTextColor: Int? = null,
@@ -47,6 +49,31 @@ data class EchoDialogTheme(
     val listItemTextColor: Int? = null,
     val checkboxColor: Int? = null
 ) {
+    
+    /**
+     * 创建对话框背景 Drawable
+     * 如果提供了 dialogBackgroundColor，则使用颜色值创建
+     * 否则使用 dialogBackground 资源
+     * 如果都没有，返回 null
+     */
+    fun createDialogBackground(context: android.content.Context): Drawable? {
+        return when {
+            dialogBackgroundColor != null -> {
+                // 使用颜色值创建带圆角的 drawable
+                GradientDrawable().apply {
+                    setColor(dialogBackgroundColor)
+                    cornerRadius = context.resources.getDimension(
+                        com.xian.echo.R.dimen.echo_dialog_corner_radius
+                    )
+                }
+            }
+            dialogBackground != null -> {
+                // 使用 drawable 资源
+                ContextCompat.getDrawable(context, dialogBackground)
+            }
+            else -> null
+        }
+    }
     
     companion object {
         /**
@@ -105,7 +132,7 @@ data class EchoDialogTheme(
             textColor: Int
         ): EchoDialogTheme {
             return EchoDialogTheme(
-                dialogBackground = R.drawable.echo_dialog_background,
+                dialogBackgroundColor = backgroundColor, // 使用颜色值而不是固定 drawable
                 titleTextColor = textColor,
                 messageTextColor = textColor,
                 positiveButtonBackground = R.drawable.text_shape,

@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import com.xian.echo.EchoDialog
 import com.xian.echo.core.BaseDialogFragment
 import com.xian.echo.core.DialogConfig
 import com.xian.echo.core.DialogResult
+import com.xian.echo.core.ThemeApplier
 
 class InputDialogFragment : BaseDialogFragment() {
 
@@ -47,6 +49,14 @@ class InputDialogFragment : BaseDialogFragment() {
         }
         config.positiveText?.let { positive.text = it }
 
+        // 应用全局主题
+        val theme = EchoDialog.getTheme()
+        ThemeApplier.applyToTextView(title, theme)
+        ThemeApplier.applyToEditText(input, theme)
+        ThemeApplier.applyToButton(positive, theme, true)
+        ThemeApplier.applyToButton(negative, theme, false)
+
+        // 应用配置中的样式（优先级更高）
         config.positiveBgResId?.let { positive.setBackgroundResource(it) }
         config.negativeBgResId?.let { negative.setBackgroundResource(it) }
         config.positiveTextColor?.let { positive.setTextColor(it) }
