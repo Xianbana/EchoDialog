@@ -9,13 +9,15 @@ class DemoApplication : Application() {
         // 初始化 EchoDialog
         EchoDialog.init(this)
 
-//         设置主题（示例：使用浅色主题）
-        EchoDialog.setDarkTheme()
+        // 从资源文件自动加载主题（推荐方式）
+        // 系统会根据当前是深色还是浅色模式，自动从 values/colors.xml 或 values-night/colors.xml 读取颜色
+        EchoDialog.loadThemeFromResources()
 
-        // 或者使用其他预设主题
-        // EchoDialog.setDarkTheme()
-        // EchoDialog.setMaterialTheme()
-
+        // 其他主题设置方式（已注释，用于测试对比）：
+        // EchoDialog.setDarkTheme()  // 使用库的默认深色主题
+        // EchoDialog.setLightTheme() // 使用库的默认浅色主题
+        // EchoDialog.setMaterialTheme() // Material Design 主题
+        
         // 或者使用自定义主题
         // EchoDialog.setCustomTheme(
         //     primaryColor = android.graphics.Color.parseColor("#FF6200EE"),

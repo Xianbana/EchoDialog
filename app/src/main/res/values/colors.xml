@@ -2,4 +2,28 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- EchoDialog 颜色定义（浅色模式）- 使用明显不同的颜色用于测试 -->
+    <!-- 对话框背景色 - 使用浅蓝色背景，与库的白色不同 -->
+    <color name="echo_dialog_bg">#FFE3F2FD</color>
+    
+    <!-- 文本颜色 - 使用深橙色标题，与库的深灰色不同 -->
+    <color name="echo_dialog_title">#FFFF6F00</color>
+    <color name="echo_dialog_message">#FF8D6E63</color>
+    
+    <!-- 按钮颜色 - 使用绿色确定按钮，红色取消按钮 -->
+    <color name="echo_dialog_positive_text">#FFFFFFFF</color>
+    <color name="echo_dialog_negative_text">#FFD32F2F</color>
+    
+    <!-- 输入框颜色 - 使用深蓝色文本 -->
+    <color name="echo_dialog_input_text">#FF1565C0</color>
+    <color name="echo_dialog_input_hint">#FF90A4AE</color>
+    
+    <!-- SeekBar 颜色 - 使用紫色进度条，与库的蓝色不同 -->
+    <color name="echo_dialog_seekbar_progress">#FF9C27B0</color>
+    <color name="echo_dialog_seekbar_thumb">#FF9C27B0</color>
+    
+    <!-- 列表项颜色 - 使用深紫色文本 -->
+    <color name="echo_dialog_list_item_text">#FF6A1B9A</color>
+    <color name="echo_dialog_checkbox">#FF9C27B0</color>
 </resources>
