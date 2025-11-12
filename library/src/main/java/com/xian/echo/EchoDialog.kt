@@ -70,6 +70,105 @@ object EchoDialog {
         this.globalTheme = EchoDialogThemes.createBrand(brandColor, isDark)
     }
     
+    /**
+     * 智能切换深色/浅色主题，保留用户的自定义设置
+     * 如果当前主题有自定义颜色，这些颜色会被保留
+     * 只有未自定义的颜色会使用预设主题的值
+     * 
+     * @param isDark true 切换到深色主题，false 切换到浅色主题
+     */
+    fun switchThemePreservingCustom(isDark: Boolean) {
+        val currentTheme = globalTheme
+        val baseTheme = if (isDark) EchoDialogThemes.DARK else EchoDialogThemes.LIGHT
+        
+        // 合并主题：保留用户自定义的设置，使用基础主题的默认值
+        globalTheme = EchoDialogTheme(
+            dialogBackground = currentTheme.dialogBackground ?: baseTheme.dialogBackground,
+            dialogBackgroundColor = currentTheme.dialogBackgroundColor ?: baseTheme.dialogBackgroundColor,
+            titleTextColor = currentTheme.titleTextColor ?: baseTheme.titleTextColor,
+            titleTextSize = currentTheme.titleTextSize ?: baseTheme.titleTextSize,
+            messageTextColor = currentTheme.messageTextColor ?: baseTheme.messageTextColor,
+            messageTextSize = currentTheme.messageTextSize ?: baseTheme.messageTextSize,
+            positiveButtonBackground = currentTheme.positiveButtonBackground ?: baseTheme.positiveButtonBackground,
+            positiveButtonTextColor = currentTheme.positiveButtonTextColor ?: baseTheme.positiveButtonTextColor,
+            positiveButtonTextSize = currentTheme.positiveButtonTextSize ?: baseTheme.positiveButtonTextSize,
+            negativeButtonBackground = currentTheme.negativeButtonBackground ?: baseTheme.negativeButtonBackground,
+            negativeButtonTextColor = currentTheme.negativeButtonTextColor ?: baseTheme.negativeButtonTextColor,
+            negativeButtonTextSize = currentTheme.negativeButtonTextSize ?: baseTheme.negativeButtonTextSize,
+            inputBackground = currentTheme.inputBackground ?: baseTheme.inputBackground,
+            inputTextColor = currentTheme.inputTextColor ?: baseTheme.inputTextColor,
+            inputHintColor = currentTheme.inputHintColor ?: baseTheme.inputHintColor,
+            seekBarProgressColor = currentTheme.seekBarProgressColor ?: baseTheme.seekBarProgressColor,
+            seekBarThumbColor = currentTheme.seekBarThumbColor ?: baseTheme.seekBarThumbColor,
+            listItemTextColor = currentTheme.listItemTextColor ?: baseTheme.listItemTextColor,
+            checkboxColor = currentTheme.checkboxColor ?: baseTheme.checkboxColor
+        )
+    }
+    
+    /**
+     * 更新主题的部分颜色，保留其他设置
+     * 
+     * @param updateBlock 用于更新主题的 lambda，参数是当前主题的 copy
+     * 
+     * 示例：
+     * ```kotlin
+     * EchoDialog.updateTheme { it.copy(
+     *     dialogBackgroundColor = Color.parseColor("#FF2C2C2C"),
+     *     titleTextColor = Color.parseColor("#FFFFFFFF")
+     * ) }
+     * ```
+     */
+    fun updateTheme(updateBlock: (EchoDialogTheme) -> EchoDialogTheme) {
+        globalTheme = updateBlock(globalTheme)
+    }
+    
+    /**
+     * 从资源文件自动加载主题
+     * 会从应用的 values/colors.xml 和 values-night/colors.xml 中读取颜色
+     * 如果资源文件中定义了颜色，就使用；如果没有定义，使用 baseTheme 的默认值
+     * 
+     * **系统会自动根据当前是深色还是浅色模式，从对应的资源文件中读取颜色**
+     * 
+     * 支持的资源名称（在 colors.xml 中定义）：
+     * - `echo_dialog_bg`: 对话框背景颜色
+     * - `echo_dialog_title`: 标题文本颜色
+     * - `echo_dialog_message`: 消息文本颜色
+     * - `echo_dialog_positive_text`: 确定按钮文本颜色
+     * - `echo_dialog_negative_text`: 取消按钮文本颜色
+     * - `echo_dialog_input_text`: 输入框文本颜色
+     * - `echo_dialog_input_hint`: 输入框提示文本颜色
+     * - `echo_dialog_seekbar_progress`: SeekBar 进度条颜色
+     * - `echo_dialog_seekbar_thumb`: SeekBar 滑块颜色
+     * - `echo_dialog_list_item_text`: 列表项文本颜色
+     * - `echo_dialog_checkbox`: 复选框颜色
+     * 
+     * @param baseTheme 基础主题，如果资源文件中没有定义颜色，使用此主题的默认值。
+     *                  如果为 null，会根据系统当前是深色还是浅色模式自动选择 LIGHT 或 DARK 主题
+     * 
+     * 示例：
+     * ```kotlin
+     * // 自动根据系统模式选择基础主题（推荐）
+     * EchoDialog.loadThemeFromResources()
+     * 
+     * // 从资源文件加载，基于浅色主题
+     * EchoDialog.loadThemeFromResources(baseTheme = EchoDialogThemes.LIGHT)
+     * 
+     * // 从资源文件加载，基于深色主题
+     * EchoDialog.loadThemeFromResources(baseTheme = EchoDialogThemes.DARK)
+     * ```
+     */
+    fun loadThemeFromResources(baseTheme: EchoDialogTheme? = null) {
+        val context = getContext()
+        val theme = baseTheme ?: run {
+            // 自动检测系统是否为深色模式
+            val isDarkMode = (context.resources.configuration.uiMode and 
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK) == 
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
+            if (isDarkMode) EchoDialogThemes.DARK else EchoDialogThemes.LIGHT
+        }
+        globalTheme = EchoDialogTheme.fromResources(context, theme)
+    }
+    
     private fun getContext(): Context {
         return appContext ?: throw IllegalStateException("EchoDialog not initialized. Call EchoDialog.init(context) in Application.onCreate()")
     }

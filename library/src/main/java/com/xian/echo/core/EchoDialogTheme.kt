@@ -84,6 +84,85 @@ data class EchoDialogTheme(
         }
         
         /**
+         * 从资源文件自动创建主题
+         * 会尝试从应用的 colors.xml 中读取颜色，如果没有定义则使用默认值
+         * 
+         * 支持的资源名称：
+         * - echo_dialog_bg: 对话框背景颜色
+         * - echo_dialog_title: 标题文本颜色
+         * - echo_dialog_message: 消息文本颜色
+         * - echo_dialog_positive_bg: 确定按钮背景颜色（资源 ID 或颜色值）
+         * - echo_dialog_positive_text: 确定按钮文本颜色
+         * - echo_dialog_negative_bg: 取消按钮背景颜色（资源 ID 或颜色值）
+         * - echo_dialog_negative_text: 取消按钮文本颜色
+         * - echo_dialog_input_text: 输入框文本颜色
+         * - echo_dialog_input_hint: 输入框提示文本颜色
+         * - echo_dialog_seekbar_progress: SeekBar 进度条颜色
+         * - echo_dialog_seekbar_thumb: SeekBar 滑块颜色
+         * - echo_dialog_list_item_text: 列表项文本颜色
+         * - echo_dialog_checkbox: 复选框颜色
+         * 
+         * @param context Context 用于访问资源
+         * @param baseTheme 基础主题，如果资源文件中没有定义颜色，使用此主题的默认值
+         * @return 从资源文件创建的主题
+         */
+        fun fromResources(context: android.content.Context, baseTheme: EchoDialogTheme = EchoDialogThemes.DEFAULT): EchoDialogTheme {
+            val resources = context.resources
+            val packageName = context.packageName
+            
+            // 辅助函数：尝试获取颜色资源，如果不存在返回 null
+            fun getColorResource(name: String): Int? {
+                return try {
+                    val resId = resources.getIdentifier(name, "color", packageName)
+                    if (resId != 0) {
+                        ContextCompat.getColor(context, resId)
+                    } else {
+                        null
+                    }
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            
+            // 辅助函数：尝试获取 drawable 资源 ID，如果不存在返回 null
+            fun getDrawableResource(name: String): Int? {
+                return try {
+                    val resId = resources.getIdentifier(name, "drawable", packageName)
+                    if (resId != 0) resId else null
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            
+            return EchoDialogTheme(
+                dialogBackground = baseTheme.dialogBackground,
+                dialogBackgroundColor = getColorResource("echo_dialog_bg") ?: baseTheme.dialogBackgroundColor,
+                titleTextColor = getColorResource("echo_dialog_title") ?: baseTheme.titleTextColor,
+                titleTextSize = baseTheme.titleTextSize,
+                messageTextColor = getColorResource("echo_dialog_message") ?: baseTheme.messageTextColor,
+                messageTextSize = baseTheme.messageTextSize,
+                positiveButtonBackground = getDrawableResource("echo_dialog_positive_bg") 
+                    ?: (getColorResource("echo_dialog_positive_bg")?.let { 
+                        // 如果是颜色值，需要创建 drawable，这里先返回 null，后续可以扩展
+                        null 
+                    } ?: baseTheme.positiveButtonBackground),
+                positiveButtonTextColor = getColorResource("echo_dialog_positive_text") ?: baseTheme.positiveButtonTextColor,
+                positiveButtonTextSize = baseTheme.positiveButtonTextSize,
+                negativeButtonBackground = getDrawableResource("echo_dialog_negative_bg")
+                    ?: (getColorResource("echo_dialog_negative_bg")?.let { null } ?: baseTheme.negativeButtonBackground),
+                negativeButtonTextColor = getColorResource("echo_dialog_negative_text") ?: baseTheme.negativeButtonTextColor,
+                negativeButtonTextSize = baseTheme.negativeButtonTextSize,
+                inputBackground = baseTheme.inputBackground,
+                inputTextColor = getColorResource("echo_dialog_input_text") ?: baseTheme.inputTextColor,
+                inputHintColor = getColorResource("echo_dialog_input_hint") ?: baseTheme.inputHintColor,
+                seekBarProgressColor = getColorResource("echo_dialog_seekbar_progress") ?: baseTheme.seekBarProgressColor,
+                seekBarThumbColor = getColorResource("echo_dialog_seekbar_thumb") ?: baseTheme.seekBarThumbColor,
+                listItemTextColor = getColorResource("echo_dialog_list_item_text") ?: baseTheme.listItemTextColor,
+                checkboxColor = getColorResource("echo_dialog_checkbox") ?: baseTheme.checkboxColor
+            )
+        }
+        
+        /**
          * 创建深色主题
          */
         fun createDark(): EchoDialogTheme {
